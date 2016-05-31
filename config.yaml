@@ -1,5 +1,4 @@
-items: ["Fujitsu AH530", "Minions (U) 2015", "Crystal Castles - Crystal
-Castles (II)"] # Individual item sku ID that needs to be checked, e.q. - https://uk.webuy.com/product.php?sku=602527404073
-requestDelay: 2
+items: ["Fujitsu AH530", "Minions (U) 2015", "Crystal Castles - Crystal Castles (II)"]
+requestDelay: 2 # A delay in seconds between HTTP GET calls
 storeId: # A specific store ID, by default not set (will check all stores)
 proceedPromptDisabled: false # Set to true if you don't wish to enter either y or n to proceed with stock check.
