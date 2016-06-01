@@ -127,7 +127,7 @@ def get_request(item_title):
     return response
 
 
-with open(CONFIG_YAML, "r") as stream:
+with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
     try:
         config = yaml.load(stream)
         items_to_check = config[CONFIG_ITEMS]
