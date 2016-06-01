@@ -1,4 +1,10 @@
-items: ["Fujitsu AH530", "Minions (U) 2015", "Crystal Castles - Crystal Castles (II)"]
-requestDelay: 2 # A delay in seconds between HTTP GET calls
-storeId: # A specific store ID, by default not set (will check all stores)
-proceedPromptDisabled: false # Set to true if you don't wish to enter either y or n to proceed with stock check.
+items: ["Crystal Castles - Crystal Castles (II)"]
+request_delay: 2 # A delay in seconds between HTTP GET calls
+store_id: # A specific store ID, by default not set (will check all stores)
+proceed_prompt_enabled: true # Set to true if you don't wish to enter either y or n to proceed with the stock check.
+send_email_enabled: false # Set to true if you wish to send the store stock check results to email
+email: # Email address that will be used to send the message, e.g. email@foo.com
+email_pass: # Password for the email account
+to_email: # Email address to which the report will be sent, e.g. to_email@bar.com
+smtp_host: # SMTP server host, e.q. mail.bar.com
+smtp_port: # SMTP server port, e.g. 587

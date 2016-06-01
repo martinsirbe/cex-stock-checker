@@ -9,6 +9,7 @@
 ```
 CEX UK is a shop that sells second-hand items, such as console games, movies, various electronic products, etc.
 This is a simple script written in Python that is used to check CEX UK website to see if given items are in a specific store stock.
+Additionally, it's possible to configure this script to send the stock check result to a specified email address.
 
 CEX UK website - https://uk.webuy.com/
 
@@ -22,16 +23,18 @@ After selecting `London W1 Tottenham Crt Rd` produces the following URL:
 https://uk.webuy.com/search/index.php?stext=crystal+castles+III&section=&rad_which_stock=3&refinebystore=1
 The store ID is defined after `refinebystore`, in this example it's 1.
 By default is not set.
-- `proceedPromptDisabled` - If set to `true` will disable the prompt before continuing with the stock check. By default is set to false.
-
-Executing the following link -
-https://uk.webuy.com/search/index.php?stext=crystal+castles+III&section=&rad_which_stock=3&refinebystore=1
-You will notice that on the right side `Available at Store - London W1 Tottenham Crt Rd` and  (store ID can be found after refinebystore, e.q. 1)
+- `proceed_prompt_enabled` - If set to `true` will disable the prompt before continuing with the stock check. By default is set to true.
+- `send_email_enabled` - If set to `true` will send a message containing the stock check result to the specified email address. By default is set to false.
+- `email` - The message will be sent from this email address.
+- `email_pass` - The password for the email address.
+- `to_email` - The message will be sent to this email address.
+- `smtp_host` - The SMTP server host.
+- `smtp_port` - The SMTP port number.
 
 ### How to run it?
 1. Clone the project
-2. cd into the directory and update the config.yaml file with item IDs that you wish to check.
-3. execute following command `python3 cex_stock_checker.py` and follow instructions.
+2. `cd` into the directory and update the config.yaml file with item IDs that you wish to check.
+3. Execute following command `python3 cex_stock_checker.py` and follow instructions.
 
 ### What is used?
 - [Python] version 3.5.1
@@ -39,10 +42,10 @@ You will notice that on the right side `Available at Store - London W1 Tottenham
 - [PyYAML] version 3.11
 
 ### To do list
-- [x] Check if items are in stock
-- [x] Check item availability in a specific shop
+- [x] Check if items are in stock.
+- [x] Check item availability in a specific shop.
+- [x] Notify about changes via email.
 - [ ] Previous price check to notify when the price drops.
-- [ ] Notify about changes via email
 
 [Python]: <https://www.python.org/>
 [PyYAML]: <http://pyyaml.org/>
