@@ -16,8 +16,8 @@ CEX UK website - https://uk.webuy.com/
 ### Configuration
 All configuration goes into `config.yaml`
 - `items` - An array of item titles that will be used to make a stock check.
-- `requestDelay` - Request delay in seconds between HTTP GET requests. By default is set to 2 seconds.
-- `storeId` - You can find store ID by making a call to CEX website and making a refined search by selecting a specific store's stock.
+- `request_delay` - Request delay in seconds between HTTP GET requests. By default is set to 2 seconds.
+- `store_id` - You can find store ID by making a call to CEX website and making a refined search by selecting a specific store's stock.
 Example:
 After selecting `London W1 Tottenham Crt Rd` produces the following URL:
 https://uk.webuy.com/search/index.php?stext=crystal+castles+III&section=&rad_which_stock=3&refinebystore=1
