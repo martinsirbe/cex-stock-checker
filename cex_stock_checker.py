@@ -5,12 +5,23 @@ from time import sleep
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-ITEM_IN_STOCK_TAG_PATTERN = "\">{}</a></h1>"
+CONFIG_YAML = "config.yaml"
+MESSAGE_HTML = "message.html"
+
+EMAIL_TO_FIELD = "To"
+EMAIL_FROM_FIELD = "From"
+EMAIL_SUBJECT_FIELD = "Subject"
+EMAIL_SUBJECT = "CEX stock check results for {} item's."
+EMAIL_MESSAGE_TYPE = "html"
+EMAIL_MESSAGE_SENT = "An email has been sent to {}"
+
+HTML_ITEM_IN_STOCK_TAG_PATTERN = "\">{}</a></h1>"
+HTML_NO_ITEMS = "<i>--- no items ---</i><br>"
+HTML_LIST_ELEMENT = "<li>{}</li>"
 
 INPUT_YES = "y"
 INPUT_NO = "n"
 
-CONFIG_YAML = "config.yaml"
 CONFIG_REQUEST_DELAY = "request_delay"
 CONFIG_ITEMS = "items"
 CONFIG_STORE_ID = "store_id"
@@ -46,7 +57,7 @@ def check_stock(proceed):
 
             response = get_request(item_title)
 
-            if ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
+            if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
                 in_stock.append(item_title)
                 print(IN_STOCK_MSG.format(item_title))
             else:
@@ -66,11 +77,11 @@ def send_email(in_stock, out_of_stock):
     formatted_in_stock_items, formatted_out_of_stock_items, checklist_items = format_checked_items(in_stock, out_of_stock)
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "CEX stock check results for " + item_count + " item's."
-    msg["From"] = email
-    msg["To"] = to_email
+    msg[EMAIL_SUBJECT_FIELD] = str.format(EMAIL_SUBJECT, item_count)
+    msg[EMAIL_FROM_FIELD] = email
+    msg[EMAIL_TO_FIELD] = to_email
 
-    with open("email.html", "r") as email_html_file:
+    with open(MESSAGE_HTML, "r") as email_html_file:
         html_template = email_html_file.read()
 
     html = MIMEText(
@@ -80,7 +91,7 @@ def send_email(in_stock, out_of_stock):
             formatted_out_of_stock_items,
             checklist_items
         ),
-        "html"
+        EMAIL_MESSAGE_TYPE
     )
     msg.attach(html)
 
@@ -91,7 +102,7 @@ def send_email(in_stock, out_of_stock):
     server.login(email, email_pass)
     server.sendmail(email, to_email, msg.as_string())
     server.close()
-    print("An email has been sent to " + to_email)
+    print(str.format(EMAIL_MESSAGE_SENT, to_email))
 
 
 def format_checked_items(in_stock, out_of_stock):
@@ -100,21 +111,21 @@ def format_checked_items(in_stock, out_of_stock):
     checklist_items = ""
 
     if not in_stock:
-        formated_in_stock_items = "<i>--- no items ---</i><br>"
+        formated_in_stock_items = HTML_NO_ITEMS
     else:
         for item in in_stock:
-            formated_in_stock_items += "<li>" + item + "</li>"
+            formated_in_stock_items += str.format(HTML_LIST_ELEMENT, item)
     if not out_of_stock:
-        formated_out_of_stock_items = "<i>--- no items ---</i><br>"
+        formated_out_of_stock_items = HTML_NO_ITEMS
     else:
         for item in out_of_stock:
-            formated_out_of_stock_items += "<li>" + item + "</li>"
+            formated_out_of_stock_items += str.format(HTML_LIST_ELEMENT, item)
 
     if not items_to_check:
-        checklist_items = "<i>--- no items ---</i><br>"
+        checklist_items = HTML_NO_ITEMS
     else:
         for item in items_to_check:
-            checklist_items += "<li>" + item + "</li>"
+            checklist_items += str.format(HTML_LIST_ELEMENT, item)
     return formated_in_stock_items, formated_out_of_stock_items, checklist_items
 
 
