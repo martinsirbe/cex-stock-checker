@@ -41,12 +41,6 @@ By default is not set.
 - [Requests] version 2.10.0
 - [PyYAML] version 3.11
 
-### To do list
-- [x] Check if items are in stock.
-- [x] Check item availability in a specific shop.
-- [x] Notify about changes via email.
-- [ ] Previous price check to notify when the price drops.
-
 [Python]: <https://www.python.org/>
 [PyYAML]: <http://pyyaml.org/>
 [Requests]: <http://docs.python-requests.org/en/master/>
