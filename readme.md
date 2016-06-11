@@ -33,8 +33,15 @@ By default is not set.
 
 ### How to run it?
 1. Clone the project
-2. `cd` into the directory and update the config.yaml file with item IDs that you wish to check.
-3. Execute following command `python3 cex_stock_checker.py` and follow instructions.
+2. Update the `config.yaml` file
+3. Install [PyYAML]:
+ * `wget -P /path/to/dir http://pyyaml.org/download/pyyaml/PyYAML-3.11.tar.gz`
+ * `tar -xzf PyYAML-3.11.tar.gz`
+ * `cd PyYAML-3.11`
+ * `python setup.py install`
+4. Install [Requests]:
+ * `pip install requests`
+3. Execute the script `python3 cex_stock_checker.py`
 
 ### What is used?
 - [Python] version 3.5.1
