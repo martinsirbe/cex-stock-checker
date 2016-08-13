@@ -31,7 +31,7 @@ By default is not set.
 - `smtp_host` - The SMTP server host.
 - `smtp_port` - The SMTP port number.
 
-### How to run it?
+### How to run it locally?
 1. Clone the project
 2. Update the `config.yaml` file
 3. Install [PyYAML]:
@@ -42,6 +42,24 @@ By default is not set.
 4. Install [Requests]:
  * `pip install requests`
 3. Execute the script `python3 cex_stock_checker.py`
+
+### How to run it on Ubuntu 14.04.4 LTS with CRON?
+1. Clone, install required libraries and update the config.yaml file.
+2. Add `import os` line at the top in `cex_stock_checker.py`
+3. Update `CONFIG_YAML` and `MESSAGE_HTML` values in `cex_stock_checker.py` to use `os.getcwd()` with path to the script location.
+Example for user `ubuntu`, full path to script would be `/home/ubuntu/apps/cex-stock-checker/cex_stock_checker.py`
+
+For user `ubuntu` the `cex_stock_checker.py` file changes would be as follow:
+```
+CONFIG_YAML = os.getcwd() + "/apps/cex-stock-checker/config.yaml"
+MESSAGE_HTML = os.getcwd() + "/apps/cex-stock-checker/message.html"
+```
+4. Run `crontab -e` and add following line, where `ubuntu` is your home directory name:
+```
+30 10 * * * python3 /home/ubuntu/apps/cex-stock-checker/cex_stock_checker.py >/dev/null 2>&1
+```
+The above example would execute the script every day at 10:30.
+You can use following CRON generator to run script at your own specified time - http://crontab-generator.org/
 
 ### What is used?
 - [Python] version 3.5.1
