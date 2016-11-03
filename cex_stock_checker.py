@@ -38,6 +38,8 @@ SPECIFIC_STORE_URL = "https://uk.webuy.com/search/index.php?stext={}&section=&ra
 
 CHECK_URL = "https://uk.webuy.com/product.php?sku={}#."
 PROCEED_PROMPT_MSG = "Do you wish to continue to check the stock for {} items? (y/n)"
+OUT_OF_STOCK_SPECIFIC_SHOP_MSG = "-  {} is currently out of stock (Store ID - {})."
+IN_STOCK_SPECIFIC_SHOP_MSG = "+  {} is in stock (Store ID - {})."
 OUT_OF_STOCK_MSG = "-  {} is currently out of stock."
 IN_STOCK_MSG = "+  {} is in stock."
 ABORT_MSG = "Aborting the stock check."
@@ -51,18 +53,11 @@ def check_stock(proceed):
         in_stock = []
         out_of_stock = []
 
-        for item in items_to_check:
-            sleep(float(request_delay))
-            item_title = str(item)
-
-            response = get_request(item_title)
-
-            if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
-                in_stock.append(item_title)
-                print(IN_STOCK_MSG.format(item_title))
-            else:
-                out_of_stock.append(item_title)
-                print(OUT_OF_STOCK_MSG.format(item_title))
+        if store_ids is not None:
+            for store_id in store_ids:
+                check(in_stock, out_of_stock, store_id)
+        else:
+            check(in_stock, out_of_stock, None)
 
         if send_email_enabled:
             send_email(in_stock, out_of_stock)
@@ -71,6 +66,29 @@ def check_stock(proceed):
     else:
         print(WRONG_INPUT_MSG)
         check_stock(input(PROCEED_PROMPT_MSG.format(item_count)))
+
+
+def check(in_stock, out_of_stock, store_id):
+    for item in items_to_check:
+        sleep(float(request_delay))
+        item_title = str(item)
+
+        response = get_request(item_title, store_id)
+
+        if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
+            if store_ids is not None:
+                in_stock.append(item_title + " (Store ID - " + str(store_id) + ")")
+                print(IN_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store_id)))
+            else:
+                in_stock.append(item_title)
+                print(IN_STOCK_MSG.format(item_title))
+        else:
+            if store_ids is not None:
+                out_of_stock.append(item_title + " (Store ID - " + str(store_id) + ")")
+                print(OUT_OF_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store_id)))
+            else:
+                out_of_stock.append(item_title)
+                print(OUT_OF_STOCK_MSG.format(item_title))
 
 
 def send_email(in_stock, out_of_stock):
@@ -130,8 +148,8 @@ def format_checked_items(in_stock, out_of_stock):
 
 
 # Make a get request to Cex with given item title.
-def get_request(item_title):
-    if store_id is None:  # By default store_id is set to None, therefore will check all stores.
+def get_request(item_title, store_id):
+    if store_ids is None:  # By default store_id is set to None, therefore will check all stores.
         response = requests.get(ANY_STORE_URL.format(item_title))
     else:  # Will check specific store stock for given item.
         response = requests.get(SPECIFIC_STORE_URL.format(item_title, store_id))
@@ -143,7 +161,7 @@ with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
         config = yaml.load(stream)
         items_to_check = config[CONFIG_ITEMS]
         request_delay = config[CONFIG_REQUEST_DELAY]
-        store_id = config[CONFIG_STORE_ID]
+        store_ids = config[CONFIG_STORE_ID]
         prompt_enabled = config[CONFIG_PROMPT_ENABLED]
         send_email_enabled = config[CONFIG_SEND_EMAIL_ENABLED]
         email = config[CONFIG_EMAIL]
