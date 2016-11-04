@@ -49,7 +49,7 @@ IN_STOCK_MSG = "+  {} is in stock."
 ABORT_MSG = "Aborting the stock check."
 WRONG_INPUT_MSG = "Sorry, I didn't get that, please choose either y or n"
 ITEM_COUNT_MSG = "Currently there are {} items in your check list."
-STORES_YAML_FILE_NOT_PRESENT_MESSAGE = 'Stores YAML file not created. Will output store IDs instead of store names.'
+STORES_YAML_FILE_NOT_PRESENT_MSG = 'Stores YAML file not created. Will output store IDs instead of store names.'
 NO_CONFIG_FILE_PRESENT_ERROR = 'No config.yaml file present.'
 STORE_NAME_NOT_FOUND = 'No name for store ID - {}'
 
@@ -83,21 +83,19 @@ def check(in_stock, out_of_stock, store_id):
         response = get_request(item_title, store_id)
 
         if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
-            if store_ids is not None:
-                store = get_store_name_from_id(store_id)
-                in_stock.append(item_title + " (Store ID - " + str(store_id) + ")")
-                print(IN_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store)))
-            else:
-                in_stock.append(item_title)
-                print(IN_STOCK_MSG.format(item_title))
+            report_item_availability(IN_STOCK_MSG, IN_STOCK_SPECIFIC_SHOP_MSG, in_stock, item_title, store_id)
         else:
-            if store_ids is not None:
-                store = get_store_name_from_id(store_id)
-                out_of_stock.append(item_title + " (Store ID - " + str(store) + ")")
-                print(OUT_OF_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store)))
-            else:
-                out_of_stock.append(item_title)
-                print(OUT_OF_STOCK_MSG.format(item_title))
+            report_item_availability(OUT_OF_STOCK_MSG, OUT_OF_STOCK_SPECIFIC_SHOP_MSG, out_of_stock, item_title, store_id)
+
+
+def report_item_availability(all_shop_message, specific_shop_message, stock, item_title, store_id):
+    if store_ids is not None:
+        store = get_store_name_from_id(store_id)
+        stock.append(item_title + " (Store ID - " + str(store_id) + ")")
+        print(specific_shop_message.format(item_title, str(store)))
+    else:
+        stock.append(item_title)
+        print(all_shop_message.format(item_title))
 
 
 def get_store_name_from_id(store_id):
@@ -183,7 +181,7 @@ try:
         except yaml.YAMLError as exception:
             print(exception)
 except FileNotFoundError:
-    print(STORES_YAML_FILE_NOT_PRESENT_MESSAGE)
+    print(STORES_YAML_FILE_NOT_PRESENT_MSG)
 
 try:
     with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
