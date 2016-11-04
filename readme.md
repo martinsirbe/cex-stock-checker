@@ -43,6 +43,10 @@ By default is not set.
  * `pip install requests`
 3. Execute the script `python3 cex_stock_checker.py`
 
+### Store IDs to Names mapping
+1. To map Store IDs to store names, simply run this command. This will create a new YAML file called stores, which will contain the mapping between the CEX store ID and the store name.
+ * `python3 store_id_to_name_mapper.py`
+
 ### How to run it on Ubuntu 14.04.4 LTS with CRON?
 1. Clone, install required libraries and update the config.yaml file.
 2. Add `import os` line at the top in `cex_stock_checker.py`

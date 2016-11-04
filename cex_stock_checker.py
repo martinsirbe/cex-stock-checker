@@ -1,11 +1,14 @@
 import yaml
 import requests
 import smtplib
+import os.path
+import sys
 from time import sleep
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 CONFIG_YAML = "config.yaml"
+STORES_YAML = "stores.yaml"
 MESSAGE_HTML = "message.html"
 
 EMAIL_TO_FIELD = "To"
@@ -32,6 +35,7 @@ CONFIG_EMAIL_PASS = "email_pass"
 CONFIG_TO_EMAIL = "to_email"
 CONFIG_SMTP_PORT = "smtp_port"
 CONFIG_SMTP_HOST = "smtp_host"
+CONFIG_STORES = 'stores'
 
 ANY_STORE_URL = "https://uk.webuy.com/search/index.php?stext={}&section=&is=1"
 SPECIFIC_STORE_URL = "https://uk.webuy.com/search/index.php?stext={}&section=&rad_which_stock=3&refinebystore={}&is=1"
@@ -45,6 +49,9 @@ IN_STOCK_MSG = "+  {} is in stock."
 ABORT_MSG = "Aborting the stock check."
 WRONG_INPUT_MSG = "Sorry, I didn't get that, please choose either y or n"
 ITEM_COUNT_MSG = "Currently there are {} items in your check list."
+STORES_YAML_FILE_NOT_PRESENT_MESSAGE = 'Stores YAML file not created. Will output store IDs instead of store names.'
+NO_CONFIG_FILE_PRESENT_ERROR = 'No config.yaml file present.'
+STORE_NAME_NOT_FOUND = 'No name for store ID - {}'
 
 
 def check_stock(proceed):
@@ -77,18 +84,32 @@ def check(in_stock, out_of_stock, store_id):
 
         if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
             if store_ids is not None:
+                store = get_store_name_from_id(store_id)
                 in_stock.append(item_title + " (Store ID - " + str(store_id) + ")")
-                print(IN_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store_id)))
+                print(IN_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store)))
             else:
                 in_stock.append(item_title)
                 print(IN_STOCK_MSG.format(item_title))
         else:
             if store_ids is not None:
-                out_of_stock.append(item_title + " (Store ID - " + str(store_id) + ")")
-                print(OUT_OF_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store_id)))
+                store = get_store_name_from_id(store_id)
+                out_of_stock.append(item_title + " (Store ID - " + str(store) + ")")
+                print(OUT_OF_STOCK_SPECIFIC_SHOP_MSG.format(item_title, str(store)))
             else:
                 out_of_stock.append(item_title)
                 print(OUT_OF_STOCK_MSG.format(item_title))
+
+
+def get_store_name_from_id(store_id):
+    store = str(store_id)
+    if os.path.isfile(STORES_YAML):
+        try:
+            store_name = stores[store_id]
+            if store_name is not None:
+                store = store_name
+        except Exception:
+            print(STORE_NAME_NOT_FOUND.format(store_id))
+    return store
 
 
 def send_email(in_stock, out_of_stock):
@@ -155,28 +176,39 @@ def get_request(item_title, store_id):
         response = requests.get(SPECIFIC_STORE_URL.format(item_title, store_id))
     return response
 
+try:
+    with open(STORES_YAML, "r", -1, "utf-8") as stream:
+        try:
+            stores = yaml.load(stream)[CONFIG_STORES]
+        except yaml.YAMLError as exception:
+            print(exception)
+except FileNotFoundError:
+    print(STORES_YAML_FILE_NOT_PRESENT_MESSAGE)
 
-with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
-    try:
-        config = yaml.load(stream)
-        items_to_check = config[CONFIG_ITEMS]
-        request_delay = config[CONFIG_REQUEST_DELAY]
-        store_ids = config[CONFIG_STORE_ID]
-        prompt_enabled = config[CONFIG_PROMPT_ENABLED]
-        send_email_enabled = config[CONFIG_SEND_EMAIL_ENABLED]
-        email = config[CONFIG_EMAIL]
-        email_pass = config[CONFIG_EMAIL_PASS]
-        to_email = config[CONFIG_TO_EMAIL]
-        smtp_host = config[CONFIG_SMTP_HOST]
-        smtp_port = config[CONFIG_SMTP_PORT]
+try:
+    with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
+        try:
+            config = yaml.load(stream)
+            items_to_check = config[CONFIG_ITEMS]
+            request_delay = config[CONFIG_REQUEST_DELAY]
+            store_ids = config[CONFIG_STORE_ID]
+            prompt_enabled = config[CONFIG_PROMPT_ENABLED]
+            send_email_enabled = config[CONFIG_SEND_EMAIL_ENABLED]
+            email = config[CONFIG_EMAIL]
+            email_pass = config[CONFIG_EMAIL_PASS]
+            to_email = config[CONFIG_TO_EMAIL]
+            smtp_host = config[CONFIG_SMTP_HOST]
+            smtp_port = config[CONFIG_SMTP_PORT]
 
-        item_count = str(len(items_to_check))
-        print(ITEM_COUNT_MSG.format(item_count))
+            item_count = str(len(items_to_check))
+            print(ITEM_COUNT_MSG.format(item_count))
 
-        if prompt_enabled:
-            check_stock(input(PROCEED_PROMPT_MSG.format(item_count)))
-        else:
-            check_stock(INPUT_YES)
+            if prompt_enabled:
+                check_stock(input(PROCEED_PROMPT_MSG.format(item_count)))
+            else:
+                check_stock(INPUT_YES)
 
-    except yaml.YAMLError as exception:
-        print(exception)
+        except yaml.YAMLError as exception:
+            print(exception)
+except FileNotFoundError:
+    sys.exit(NO_CONFIG_FILE_PRESENT_ERROR)
