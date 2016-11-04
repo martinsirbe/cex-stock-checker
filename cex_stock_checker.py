@@ -1,3 +1,5 @@
+#! /usr/local/bin/python3
+
 import yaml
 import requests
 import smtplib
@@ -91,7 +93,7 @@ def check(in_stock, out_of_stock, store_id):
 def report_item_availability(all_shop_message, specific_shop_message, stock, item_title, store_id):
     if store_ids is not None:
         store = get_store_name_from_id(store_id)
-        stock.append(item_title + " (Store ID - " + str(store_id) + ")")
+        stock.append(item_title + " (" + str(store_id) + ")")
         print(specific_shop_message.format(item_title, str(store)))
     else:
         stock.append(item_title)
