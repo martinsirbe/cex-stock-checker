@@ -9,8 +9,9 @@ import requests
 MAX_DELAY = 3
 MIN_DELAY = 2
 LAST_STORE_ID = 350
-STORES_YAML = "stores.yaml"
+STORES_YAML = 'stores.yaml'
 STORE_URL = 'https://uk.webuy.com/stores/store_details.php?branchId={}'
+FINISH_MSG = 'Finished updating stores YAML file.'
 
 stores_yaml = 'stores:\n'
 storeId = 1
@@ -30,7 +31,7 @@ while storeId <= LAST_STORE_ID:
     sleep(float(random.uniform(MIN_DELAY, MAX_DELAY)))
     storeId += 1
 
-    text_file = open(STORES_YAML, "w")
+    text_file = open(STORES_YAML, 'w')
     text_file.write(stores_yaml)
     text_file.close()
-sys.exit("Finished updating stores YAML file.")
+sys.exit(FINISH_MSG)
