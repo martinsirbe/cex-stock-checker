@@ -16,7 +16,7 @@ MESSAGE_HTML = "message.html"
 EMAIL_TO_FIELD = "To"
 EMAIL_FROM_FIELD = "From"
 EMAIL_SUBJECT_FIELD = "Subject"
-EMAIL_SUBJECT = "CEX stock check results for {} item's."
+EMAIL_SUBJECT = "CEX stock check results. {} item's in stock."
 EMAIL_MESSAGE_TYPE = "html"
 EMAIL_MESSAGE_SENT = "An email has been sent to {}"
 
@@ -116,7 +116,7 @@ def send_email(in_stock, out_of_stock):
     formatted_in_stock_items, formatted_out_of_stock_items, checklist_items = format_checked_items(in_stock, out_of_stock)
 
     msg = MIMEMultipart("alternative")
-    msg[EMAIL_SUBJECT_FIELD] = str.format(EMAIL_SUBJECT, item_count)
+    msg[EMAIL_SUBJECT_FIELD] = str.format(EMAIL_SUBJECT.format(len(in_stock)), item_count)
     msg[EMAIL_FROM_FIELD] = email
     msg[EMAIL_TO_FIELD] = to_email
 
