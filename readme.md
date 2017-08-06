@@ -35,12 +35,9 @@ By default is not set.
 1. Clone the project
 2. Update the `config.yaml` file
 3. Install [PyYAML]:
- * `wget -P /path/to/dir http://pyyaml.org/download/pyyaml/PyYAML-3.11.tar.gz`
- * `tar -xzf PyYAML-3.11.tar.gz`
- * `cd PyYAML-3.11`
- * `python setup.py install`
+ * `pip3 install PyYAML`
 4. Install [Requests]:
- * `pip install requests`
+ * `pip3 install requests`
 3. Execute the script `./cex_stock_checker.py`
 
 ### Store IDs to Names mapping
