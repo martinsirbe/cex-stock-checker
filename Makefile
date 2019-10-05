@@ -10,3 +10,11 @@ run:
 load-stores:
 	@echo "Updating 'config/stores.yaml' file..."
 	@python3 load_stores.py
+
+.PHONY: docker-build
+docker-build:
+	docker build -f Dockerfile -t cex-stock-checker .
+
+.PHONY: docker-run
+docker-run: docker-build
+	docker run cex-stock-checker:latest
