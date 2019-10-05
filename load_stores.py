@@ -13,5 +13,5 @@ stores = {}
 for store in get_stores():
     stores[store.get("storeId")] = store.get("storeName")
 
-with open('stores.yaml', 'w') as f:
+with open('config/stores.yaml', 'w') as f:
     data = yaml.dump(stores, f)

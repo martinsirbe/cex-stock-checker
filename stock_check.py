@@ -7,9 +7,9 @@ from time import sleep
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-CONFIG_YAML = "config.yaml"
-STORES_YAML = "stores.yaml"
-MESSAGE_HTML = "message.html"
+CONFIG_YAML = "config/checker.yaml"
+STORES_YAML = "config/stores.yaml"
+MESSAGE_HTML = "templates/message.html"
 
 EMAIL_TO_FIELD = "To"
 EMAIL_FROM_FIELD = "From"
@@ -27,7 +27,7 @@ INPUT_NO = "n"
 
 CONFIG_REQUEST_DELAY = "request_delay"
 CONFIG_ITEMS = "items"
-CONFIG_STORE_ID = "store_id"
+CONFIG_STORE_IDS = "store_ids"
 CONFIG_PROMPT_ENABLED = "proceed_prompt_enabled"
 CONFIG_SEND_EMAIL_ENABLED = "send_email_enabled"
 CONFIG_EMAIL = "email"
@@ -50,7 +50,7 @@ ABORT_MSG = "Aborting the stock check."
 WRONG_INPUT_MSG = "Sorry, I didn't get that, please choose either y or n"
 ITEM_COUNT_MSG = "Currently there are {} items in your check list."
 STORES_YAML_FILE_NOT_PRESENT_MSG = 'Stores YAML file not created. Will output store IDs instead of store names.'
-NO_CONFIG_FILE_PRESENT_ERROR = 'No config.yaml file present.'
+NO_CONFIG_FILE_PRESENT_ERROR = 'No config/checker.yaml file present.'
 STORE_NAME_NOT_FOUND = 'No name for store ID - {}'
 
 
@@ -189,7 +189,7 @@ try:
             config = yaml.load(stream)
             items_to_check = config[CONFIG_ITEMS]
             request_delay = config[CONFIG_REQUEST_DELAY]
-            store_ids = config[CONFIG_STORE_ID]
+            store_ids = config[CONFIG_STORE_IDS]
             prompt_enabled = config[CONFIG_PROMPT_ENABLED]
             send_email_enabled = config[CONFIG_SEND_EMAIL_ENABLED]
             email = config[CONFIG_EMAIL]

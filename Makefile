@@ -8,5 +8,5 @@ run:
 
 .PHONY: load-stores
 load-stores:
-	@echo "Updating 'stores.yaml' file..."
+	@echo "Updating 'config/stores.yaml' file..."
 	@python3 load_stores.py
