@@ -35,7 +35,6 @@ CONFIG_EMAIL_PASS = "email_pass"
 CONFIG_TO_EMAIL = "to_email"
 CONFIG_SMTP_PORT = "smtp_port"
 CONFIG_SMTP_HOST = "smtp_host"
-CONFIG_STORES = 'stores'
 
 CEX_API_URL = "https://wss2.cex.uk.webuy.io/v3"
 ANY_STORE_SEARCH = "{}/boxes?q={}"
@@ -43,8 +42,8 @@ SPECIFIC_STORE_SEARCH = "{}/boxes?q={}&storeIds=[{}]"
 DEFAULT_QUERY_PARAMS = "&firstRecord=1&count=50&sortBy=relevance&sortOrder=desc"
 
 PROCEED_PROMPT_MSG = "Do you wish to continue to check the stock for {} items? (y/n)"
-OUT_OF_STOCK_SPECIFIC_SHOP_MSG = "-  {} is currently out of stock (Store ID - {})."
-IN_STOCK_SPECIFIC_SHOP_MSG = "+  {} is in stock (Store ID - {})."
+OUT_OF_STOCK_SPECIFIC_SHOP_MSG = "-  {} is currently out of stock (Store - {})."
+IN_STOCK_SPECIFIC_SHOP_MSG = "+  {} is in stock (Store - {})."
 OUT_OF_STOCK_MSG = "-  {} is currently out of stock."
 IN_STOCK_MSG = "+  {} is in stock."
 ABORT_MSG = "Aborting the stock check."
@@ -103,7 +102,7 @@ def get_store_name_from_id(store_id):
     store = str(store_id)
     if os.path.isfile(STORES_YAML):
         try:
-            store_name = stores[store_id]
+            store_name = stores[store]
             if store_name is not None:
                 store = store_name
         except Exception:
@@ -178,7 +177,7 @@ def get_request(item_title, store_id):
 try:
     with open(STORES_YAML, "r", -1, "utf-8") as stream:
         try:
-            stores = yaml.load(stream, Loader=yaml.BaseLoader)[CONFIG_STORES]
+            stores = yaml.load(stream, Loader=yaml.BaseLoader)
         except yaml.YAMLError as exception:
             print(exception)
 except FileNotFoundError:

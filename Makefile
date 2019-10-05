@@ -4,4 +4,9 @@ requirements:
 
 .PHONY: run
 run:
-	python3 cex_stock_checker.py
+	python3 stock_check.py
+
+.PHONY: load-stores
+load-stores:
+	@echo "Updating 'stores.yaml' file..."
+	@python3 load_stores.py
