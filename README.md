@@ -1,6 +1,7 @@
 # CEX Stock Checker
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_shield) 
+[![CircleCI](https://circleci.com/gh/martinsirbe/cex-stock-checker.svg?style=svg)](https://circleci.com/gh/martinsirbe/cex-stock-checker)  
 
 [CEX UK](CEX) is a second-hand shop where you can buy video games, movies, various electronic products etc. 
 The initial goal of this project was to add a cron job which would check the CEX stock and notify me when 
@@ -48,7 +49,6 @@ configuration file relative to the root of this project.
 ## Store IDs to Names mapping
 1. To map Store IDs to store names, simply run `make load-stores`. This will create a new `config/stores.yaml` file, 
 which will contain the mapping between the CEX store ID and name, e.g. `1: London W1 Tottenham Crt Rd`.
- * `./store_id_to_name_mapper.py`
 
 ## How to run it on Ubuntu 14.04.4 LTS with CRON?
 1. Run `crontab -e` and add following line, where `ubuntu` is your home directory name:
