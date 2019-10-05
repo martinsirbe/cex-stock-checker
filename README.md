@@ -13,7 +13,7 @@ Additionally, it's possible to configure this script to send the stock check res
 
 CEX UK website - https://uk.webuy.com/
 
-### Configuration
+## Configuration
 All configuration goes into `config.yaml`
 - `items` - An array of item titles that will be used to make a stock check.
 - `request_delay` - Request delay in seconds between HTTP GET requests. By default is set to 2 seconds.
@@ -31,25 +31,44 @@ By default is not set.
 - `smtp_host` - The SMTP server host.
 - `smtp_port` - The SMTP port number.
 
-### How to run it locally?
+## Run it
 1. Clone the project
 2. Update the `config.yaml` file
 3. Install requirements by running `make requirements`
 4. Run the script `make run`
 
-### Store IDs to Names mapping
+## Store IDs to Names mapping
 1. To map Store IDs to store names, simply run this command. This will create a new YAML file called stores, which will contain the mapping between the CEX store ID and the store name.
  * `./store_id_to_name_mapper.py`
 
-### How to run it on Ubuntu 14.04.4 LTS with CRON?
+## How to run it on Ubuntu 14.04.4 LTS with CRON?
 1. Run `crontab -e` and add following line, where `ubuntu` is your home directory name:
 ```
-30 10 * * * cd /home/ubuntu/path/to/cex-stock-checker/ && ./cex_stock_checker.py
+30 10 * * * cd /home/ubuntu/path/to/cex-stock-checker/ && python3 cex_stock_checker.py
 ```
 The above example would execute the script every day at 10:30.
 You can use following CRON generator to run script at your own specified time - http://crontab-generator.org/
 
-### What is used?
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.  
+
+## Contributing
+* Fork the repository github.com/martinsirbe/cex-stock-checker
+* Create your feature branch:
+```bash
+git checkout -b my-feature-branch
+```
+* Commit your changes:
+```bash
+git commit -m 'Add ...'
+```
+* Push to the branch.
+```bash
+git push origin my-feature-branch
+```
+* Create a new pull request and select the `cex-stock-checker` master branch as the base.
+
+## What is used?
 - [Python] version 3.5.1
 - [Requests] version 2.10.0
 - [PyYAML] version 3.11
