@@ -4,4 +4,4 @@ requirements:
 
 .PHONY: run
 run:
-	./cex_stock_checker.py
+	python3 cex_stock_checker.py

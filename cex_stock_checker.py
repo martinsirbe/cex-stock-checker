@@ -1,5 +1,3 @@
-#! /usr/bin/env python3
-
 import yaml
 import requests
 import smtplib
@@ -39,10 +37,11 @@ CONFIG_SMTP_PORT = "smtp_port"
 CONFIG_SMTP_HOST = "smtp_host"
 CONFIG_STORES = 'stores'
 
-ANY_STORE_URL = "https://uk.webuy.com/search/index.php?stext={}&section=&is=1"
-SPECIFIC_STORE_URL = "https://uk.webuy.com/search/index.php?stext={}&section=&rad_which_stock=3&refinebystore={}&is=1"
+CEX_API_URL = "https://wss2.cex.uk.webuy.io/v3"
+ANY_STORE_SEARCH = "{}/boxes?q={}"
+SPECIFIC_STORE_SEARCH = "{}/boxes?q={}&storeIds=[{}]"
+DEFAULT_QUERY_PARAMS = "&firstRecord=1&count=50&sortBy=relevance&sortOrder=desc"
 
-CHECK_URL = "https://uk.webuy.com/product.php?sku={}#."
 PROCEED_PROMPT_MSG = "Do you wish to continue to check the stock for {} items? (y/n)"
 OUT_OF_STOCK_SPECIFIC_SHOP_MSG = "-  {} is currently out of stock (Store ID - {})."
 IN_STOCK_SPECIFIC_SHOP_MSG = "+  {} is in stock (Store ID - {})."
@@ -84,7 +83,7 @@ def check(in_stock, out_of_stock, store_id):
 
         response = get_request(item_title, store_id)
 
-        if HTML_ITEM_IN_STOCK_TAG_PATTERN.format(item_title) in response.text:
+        if response.json().get("response").get("data") is not None:
             report_item_availability(IN_STOCK_MSG, IN_STOCK_SPECIFIC_SHOP_MSG, in_stock, item_title, store_id)
         else:
             report_item_availability(OUT_OF_STOCK_MSG, OUT_OF_STOCK_SPECIFIC_SHOP_MSG, out_of_stock, item_title, store_id)
@@ -171,15 +170,15 @@ def format_checked_items(in_stock, out_of_stock):
 # Make a get request to Cex with given item title.
 def get_request(item_title, store_id):
     if store_ids is None:  # By default store_id is set to None, therefore will check all stores.
-        response = requests.get(ANY_STORE_URL.format(item_title))
+        response = requests.get(ANY_STORE_SEARCH.format(CEX_API_URL, item_title, DEFAULT_QUERY_PARAMS))
     else:  # Will check specific store stock for given item.
-        response = requests.get(SPECIFIC_STORE_URL.format(item_title, store_id))
+        response = requests.get(SPECIFIC_STORE_SEARCH.format(CEX_API_URL, item_title, store_id, DEFAULT_QUERY_PARAMS))
     return response
 
 try:
     with open(STORES_YAML, "r", -1, "utf-8") as stream:
         try:
-            stores = yaml.load(stream)[CONFIG_STORES]
+            stores = yaml.load(stream, Loader=yaml.BaseLoader)[CONFIG_STORES]
         except yaml.YAMLError as exception:
             print(exception)
 except FileNotFoundError:
