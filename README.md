@@ -40,14 +40,14 @@ The store ID is defined after `refinebystore`, in this example it's `1`.
 4. Run the script `make run`
 
 ### Docker
-1. Run `make docker-run` to build a docker image locally and to run it.
-2. Alternatviely you can run a prebuilt docker image by running:
-```bash
-docker run 
-```
+1. Run `make docker-run-local` to build a docker image locally and to run it.  
+2. Alternatively, it's possible to use prebuilt `martinsirbe/cex-stock-checker` docker image by 
+running `make docker-run CUSTOM_CONFIG=config/checker.yaml`, where `CUSTOM_CONFIG` points to the custom 
+configuration file relative to the root of this project.
 
 ## Store IDs to Names mapping
-1. To map Store IDs to store names, simply run this command. This will create a new YAML file called stores, which will contain the mapping between the CEX store ID and the store name.
+1. To map Store IDs to store names, simply run `make load-stores`. This will create a new `config/stores.yaml` file, 
+which will contain the mapping between the CEX store ID and name, e.g. `1: London W1 Tottenham Crt Rd`.
  * `./store_id_to_name_mapper.py`
 
 ## How to run it on Ubuntu 14.04.4 LTS with CRON?
@@ -60,6 +60,7 @@ You can use following CRON generator to run script at your own specified time - 
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.  
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_large)
 
 ## Contributing
 * Fork the repository github.com/martinsirbe/cex-stock-checker
@@ -77,12 +78,4 @@ git push origin my-feature-branch
 ```
 * Create a new pull request and select the `cex-stock-checker` master branch as the base.
 
-## What is used?
-- [Python] version 3.5.1
-- [Requests] version 2.10.0
-- [PyYAML] version 3.11
-
-[CEX]: <https://uk.webuy.com/>
-[Python]: <https://www.python.org/>
-[PyYAML]: <http://pyyaml.org/>
-[Requests]: <http://docs.python-requests.org/en/master/>
+[CEX]: https://uk.webuy.com/
