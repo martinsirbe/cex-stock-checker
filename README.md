@@ -1,17 +1,16 @@
-```
-                     _             _           _               _
-                    | |           | |         | |             | |
-  ___ _____  __  ___| |_ ___   ___| | __   ___| |__   ___  ___| | _____ _ __
- / __/ _ \ \/ / / __| __/ _ \ / __| |/ /  / __| '_ \ / _ \/ __| |/ / _ \ '__|
-| (_|  __/>  <  \__ \ || (_) | (__|   <  | (__| | | |  __/ (__|   <  __/ |
- \___\___/_/\_\ |___/\__\___/ \___|_|\_\  \___|_| |_|\___|\___|_|\_\___|_|
+# CEX Stock Checker
 
-```
-CEX UK is a shop that sells second-hand items, such as console games, movies, various electronic products, etc.
-This is a simple script written in Python that is used to check CEX UK website to see if given items are in a specific store stock.
-Additionally, it's possible to configure this script to send the stock check result to a specified email address.
+[CEX UK](CEX) is a second-hand shop where you can buy video games, movies, various electronic products etc. 
+The initial goal of this project was to add a cron job which would check the CEX stock and notify me when 
+some specific games are available in my local store.  
+`stock_check.py` - a simple Python script used to check CEX UK API to verify whether the specified items are in the stock.  
+`load_stores.py` - maps CEX store ID to store name and writes mapped values to the `stores.yaml` file. By default the `stores.yaml` 
+is provided, however you might want to run `make load-stores` if the store you are looking for isn't included.  
 
-CEX UK website - https://uk.webuy.com/
+Additionally, it's possible to configure this script to send the stock check results to a specified email address. 
+Any contributions are welcome!
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_shield)
 
 ## Configuration
 All configuration goes into `config.yaml`
@@ -44,7 +43,7 @@ By default is not set.
 ## How to run it on Ubuntu 14.04.4 LTS with CRON?
 1. Run `crontab -e` and add following line, where `ubuntu` is your home directory name:
 ```
-30 10 * * * cd /home/ubuntu/path/to/cex-stock-checker/ && python3 cex_stock_checker.py
+30 10 * * * cd /home/ubuntu/path/to/cex-stock-checker/ && python3 stock_check.py
 ```
 The above example would execute the script every day at 10:30.
 You can use following CRON generator to run script at your own specified time - http://crontab-generator.org/
@@ -73,6 +72,7 @@ git push origin my-feature-branch
 - [Requests] version 2.10.0
 - [PyYAML] version 3.11
 
+[CEX]: https://uk.webuy.com/
 [Python]: <https://www.python.org/>
 [PyYAML]: <http://pyyaml.org/>
 [Requests]: <http://docs.python-requests.org/en/master/>
