@@ -1,5 +1,7 @@
 FROM python:3
 
+ENV CUSTOM_CONFIG "/config/checker.yaml"
+
 COPY stock_check.py .
 COPY config config
 

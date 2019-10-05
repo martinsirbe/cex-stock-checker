@@ -7,7 +7,7 @@ from time import sleep
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-CONFIG_YAML = "config/checker.yaml"
+CONFIG_YAML = os.getenv('CUSTOM_CONFIG', "config/checker.yaml")
 STORES_YAML = "config/stores.yaml"
 MESSAGE_HTML = "templates/message.html"
 
@@ -50,7 +50,7 @@ ABORT_MSG = "Aborting the stock check."
 WRONG_INPUT_MSG = "Sorry, I didn't get that, please choose either y or n"
 ITEM_COUNT_MSG = "Currently there are {} items in your check list."
 STORES_YAML_FILE_NOT_PRESENT_MSG = 'Stores YAML file not created. Will output store IDs instead of store names.'
-NO_CONFIG_FILE_PRESENT_ERROR = 'No config/checker.yaml file present.'
+NO_CONFIG_FILE_PRESENT_ERROR = 'No configuration file. ¯\\_(ツ)_/¯'
 STORE_NAME_NOT_FOUND = 'No name for store ID - {}'
 
 
@@ -85,7 +85,8 @@ def check(in_stock, out_of_stock, store_id):
         if response.json().get("response").get("data") is not None:
             report_item_availability(IN_STOCK_MSG, IN_STOCK_SPECIFIC_SHOP_MSG, in_stock, item_title, store_id)
         else:
-            report_item_availability(OUT_OF_STOCK_MSG, OUT_OF_STOCK_SPECIFIC_SHOP_MSG, out_of_stock, item_title, store_id)
+            report_item_availability(
+                OUT_OF_STOCK_MSG, OUT_OF_STOCK_SPECIFIC_SHOP_MSG, out_of_stock, item_title, store_id)
 
 
 def report_item_availability(all_shop_message, specific_shop_message, stock, item_title, store_id):
@@ -111,7 +112,8 @@ def get_store_name_from_id(store_id):
 
 
 def send_email(in_stock, out_of_stock):
-    formatted_in_stock_items, formatted_out_of_stock_items, checklist_items = format_checked_items(in_stock, out_of_stock)
+    formatted_in_stock_items, formatted_out_of_stock_items, checklist_items = format_checked_items(
+        in_stock, out_of_stock)
 
     msg = MIMEMultipart("alternative")
     msg[EMAIL_SUBJECT_FIELD] = str.format(EMAIL_SUBJECT.format(len(in_stock)), item_count)
@@ -174,6 +176,7 @@ def get_request(item_title, store_id):
         response = requests.get(SPECIFIC_STORE_SEARCH.format(CEX_API_URL, item_title, store_id, DEFAULT_QUERY_PARAMS))
     return response
 
+
 try:
     with open(STORES_YAML, "r", -1, "utf-8") as stream:
         try:
@@ -182,6 +185,8 @@ try:
             print(exception)
 except FileNotFoundError:
     print(STORES_YAML_FILE_NOT_PRESENT_MSG)
+
+print("config used:", CONFIG_YAML)
 
 try:
     with open(CONFIG_YAML, "r", -1, "utf-8") as stream:

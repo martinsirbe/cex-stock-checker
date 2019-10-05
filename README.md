@@ -33,10 +33,18 @@ The store ID is defined after `refinebystore`, in this example it's `1`.
 - `smtp_port` - The SMTP port number.
 
 ## Run it
+### Locally
 1. Clone the project
 2. Update the `config/checker.yaml` file
 3. Install requirements by running `make requirements`
 4. Run the script `make run`
+
+### Docker
+1. Run `make docker-run` to build a docker image locally and to run it.
+2. Alternatviely you can run a prebuilt docker image by running:
+```bash
+docker run 
+```
 
 ## Store IDs to Names mapping
 1. To map Store IDs to store names, simply run this command. This will create a new YAML file called stores, which will contain the mapping between the CEX store ID and the store name.
@@ -74,7 +82,7 @@ git push origin my-feature-branch
 - [Requests] version 2.10.0
 - [PyYAML] version 3.11
 
-[CEX]: https://uk.webuy.com/
+[CEX]: <https://uk.webuy.com/>
 [Python]: <https://www.python.org/>
 [PyYAML]: <http://pyyaml.org/>
 [Requests]: <http://docs.python-requests.org/en/master/>
