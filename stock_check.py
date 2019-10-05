@@ -186,7 +186,7 @@ except FileNotFoundError:
 try:
     with open(CONFIG_YAML, "r", -1, "utf-8") as stream:
         try:
-            config = yaml.load(stream)
+            config = yaml.load(stream, Loader=yaml.FullLoader)
             items_to_check = config[CONFIG_ITEMS]
             request_delay = config[CONFIG_REQUEST_DELAY]
             store_ids = config[CONFIG_STORE_IDS]
