@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_shield)
+
 ```
                      _             _           _               _
                     | |           | |         | |             | |
@@ -57,3 +59,6 @@ You can use following CRON generator to run script at your own specified time - 
 [Python]: <https://www.python.org/>
 [PyYAML]: <http://pyyaml.org/>
 [Requests]: <http://docs.python-requests.org/en/master/>
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmartinsirbe%2Fcex-stock-checker?ref=badge_large)
