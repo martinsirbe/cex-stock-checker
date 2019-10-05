@@ -34,11 +34,8 @@ By default is not set.
 ### How to run it locally?
 1. Clone the project
 2. Update the `config.yaml` file
-3. Install [PyYAML]:
- * `pip3 install PyYAML`
-4. Install [Requests]:
- * `pip3 install requests`
-3. Execute the script `./cex_stock_checker.py`
+3. Install requirements by running `make requirements`
+4. Run the script `make run`
 
 ### Store IDs to Names mapping
 1. To map Store IDs to store names, simply run this command. This will create a new YAML file called stores, which will contain the mapping between the CEX store ID and the store name.
